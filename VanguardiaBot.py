@@ -26,8 +26,8 @@ def enviar_mensaje(texto):
 def obtener_enlace_cita():
     try:
         headers = {
-            "User-Agent": "Mozilla/5.0"
-        }
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+}
         resp = requests.get(URL_BASE, headers=headers, timeout=10)
         if resp.status_code != 200:
             enviar_mensaje("Error al acceder a la página principal del consulado.")
@@ -37,7 +37,10 @@ def obtener_enlace_cita():
         for enlace in enlaces:
             texto = enlace.text.strip().lower()
             if 'solicitar certificado de nacimiento' in texto and 'dni' not in texto:
-                return enlace['href']
+    href = enlace['href']
+    if not href.startswith("http"):
+        href = "https://www.exteriores.gob.es" + href
+    return href
         enviar_mensaje("No se encontró el enlace al trámite de certificado de nacimiento.")
     except Exception as e:
         enviar_mensaje(f"Error al buscar el enlace: {e}")
@@ -81,6 +84,6 @@ def revisar():
             enviar_mensaje(f"Error general: {e}")
         time.sleep(60)
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     enviar_mensaje("Bot iniciado correctamente.")
-    revisar()
+    revisar()
