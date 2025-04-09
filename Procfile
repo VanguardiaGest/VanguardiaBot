@@ -1,1 +1,1 @@
-worker: python VanguardiaBot.py 
+worker: python main.py 
